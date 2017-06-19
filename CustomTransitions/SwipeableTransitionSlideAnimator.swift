@@ -38,9 +38,11 @@ class SwipeableTransitionSlideAnimator: NSObject, UIViewControllerAnimatedTransi
         }
         // Set up the view heiarchy
         if isPresenting {
+            containerView.addSubview(fromView)
             containerView.addSubview(toView)
         } else {
-            containerView.insertSubview(toView, belowSubview: fromView)
+            containerView.addSubview(toView)
+            containerView.addSubview(fromView)
         }
         var directionalViewOffset: CGFloat = 0
         
@@ -73,12 +75,15 @@ class SwipeableTransitionSlideAnimator: NSObject, UIViewControllerAnimatedTransi
         }) { (completed) in
             transitionContext.completeTransition(!self.transitionContext!.transitionWasCancelled)
             if transitionContext.transitionWasCancelled {
+                UIApplication.shared.keyWindow!.addSubview(fromView)
                 if !isFromMainViewController {
                     fromViewController.beginAppearanceTransition(true, animated: true)
                 }
                 if !isToMainViewController {
                     toViewController.beginAppearanceTransition(false, animated: true)
                 }
+            } else {
+                UIApplication.shared.keyWindow!.addSubview(toView)
             }
             if !isToMainViewController {
                 toViewController.endAppearanceTransition()
