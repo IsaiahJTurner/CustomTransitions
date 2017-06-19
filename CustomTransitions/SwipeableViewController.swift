@@ -9,14 +9,7 @@
 import UIKit
 
 class SwipeableViewController: UIViewController, UIViewControllerTransitioningDelegate, UIGestureRecognizerDelegate {
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.modalPresentationStyle = .custom
-    }
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.modalPresentationStyle = .custom
-    }
+    
     var swipableViewControllerToPresentOnLeft: UIViewController?
     var swipableViewControllerToPresentOnRight: UIViewController?
     var isSwipingEnabled = true {
@@ -80,6 +73,17 @@ class SwipeableViewController: UIViewController, UIViewControllerTransitioningDe
         self.panGestureRecognizer.delegate = self
         self.view.addGestureRecognizer(panGestureRecognizer)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.view.backgroundColor = #colorLiteral(red: 1, green: 0.9490196078, blue: 0, alpha: 1)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if !(self is MainViewController) {
+            self.view.backgroundColor = .clear
+        }
+    }
+    
     internal func handlePanGesture(panGestureRecognizer: UIPanGestureRecognizer) {
         let velocity = panGestureRecognizer.velocity(in: self.view)
         let translation = panGestureRecognizer.translation(in: self.view)
